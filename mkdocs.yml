@@ -58,3 +58,5 @@ plugins:
 
 nav:
   - Home: index.html
+  - API:
+    Core: api/core.md
