@@ -32,6 +32,12 @@ repository = "https://github.com/hotosm/osm-login-python"
 test = [
     "pytest>=7.4.2",
 ]
+docs = [
+    "mkdocs>=1.5.3",
+    "mkdocs-material>=9.4.2",
+    "mkdocstrings-python>=1.7.0",
+    "mkdocs-exclude>=1.0.2",
+]
 [build-system]
 requires = ["pdm-pep517>=1.1.4"]
 build-backend = "pdm.pep517.api"
