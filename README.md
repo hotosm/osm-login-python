@@ -1,21 +1,27 @@
 # osm-login-python
+
 Library to provide osm login oauth2.0 exchange to python projects
 
 Makes it very easier to implement osm authentication login to their project with oauth2.0
 
-## Install with [pip](https://pypi.org/project/osm-login-python/) :
+## Install with [pip](https://pypi.org/project/osm-login-python/)
 
 ```
 pip install osm-login-python
 ```
+
 ## Import Auth and initialize class with your credentials
+
 ```
 from osm_login_python.core import Auth
 ```
+
 ```
 osm_auth=Auth(osm_url=YOUR_OSM_URL, client_id=YOUR_OSM_CLIENT_ID,client_secret=YOUR_OSM_CLIENT_SECRET, secret_key=YOUR_OSM_SECRET_KEY, login_redirect_uri=YOUR_OSM_LOGIN_REDIRECT_URI, scope=YOUR_OSM_SCOPE)
 ```
+
 ## Usage
+
 Provides 3 Functions inside Auth class :
 
 1. login() -- Returns the login url for osm
@@ -23,6 +29,7 @@ Provides 3 Functions inside Auth class :
 3. deserialize_access_token() -- returns the user data
 
 ## Example
+
 On django :
 
 ```
@@ -46,15 +53,16 @@ def callback(request):
 def get_my_data(request,access_token: str):
     user_data=osm_auth.deserialize_access_token(access_token)
     return JsonResponse(user_data)
- ```
-- Check Django integration example here https://github.com/hotosm/fAIr/tree/master/backend/login 
+```
 
-- Check FastAPI integration example here https://github.com/hotosm/export-tool-api/tree/develop/API/auth
+- Check Django integration example here <https://github.com/hotosm/fAIr/tree/master/backend/login>
 
+- Check FastAPI integration example here <https://github.com/hotosm/export-tool-api/tree/develop/API/auth>
 
-### Version Control 
-Use [commitizen](https://pypi.org/project/commitizen/) for version control 
+### Version Control
+
+Use [commitizen](https://pypi.org/project/commitizen/) for version control
 
 ### Contirbute
 
-Contributions are welcome ! 
+Contributions are welcome !

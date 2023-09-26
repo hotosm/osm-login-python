@@ -1,16 +1,16 @@
 import base64
+import json
+
+from itsdangerous import BadSignature, SignatureExpired
+from itsdangerous.url_safe import URLSafeSerializer
 from pydantic import ValidationError
 from requests_oauthlib import OAuth2Session
-from itsdangerous.url_safe import URLSafeSerializer
-from itsdangerous import BadSignature, SignatureExpired
-import json
+
 from . import Login, Token
 
 
 class Auth:
-    def __init__(
-        self, osm_url, client_id, client_secret, secret_key, login_redirect_uri, scope
-    ):
+    def __init__(self, osm_url, client_id, client_secret, secret_key, login_redirect_uri, scope):
         self.osm_url = osm_url
         self.client_secret = client_secret
         self.secret_key = secret_key
@@ -23,13 +23,13 @@ class Auth:
     def login(
         self,
     ):
-        """Provides login URL using the session created by osm client id and redirect uri supplied"""
+        """Provides login URL using the session created by osm client id and redirect uri supplied."""
         authorize_url = f"{self.osm_url}/oauth2/authorize/"
         login_url, _ = self.oauth.authorization_url(authorize_url)
         return json.loads(Login(login_url=login_url).json())
 
     def callback(self, callback_url: str):
-        """Performs token exchange between OpenStreetMap and the Application supplied
+        """Performs token exchange between OpenStreetMap and the Application supplied.
 
         Core will use Oauth secret key from configuration while deserializing token,
         provides access token that can be used for authorized endpoints.
@@ -62,7 +62,7 @@ class Auth:
         return json.loads(token.json())
 
     def deserialize_access_token(self, access_token: str):
-        """Returns the userdata as json from access token , Can be used for login required decorator or to check the access token provided"""
+        """Returns the userdata as json from access token , Can be used for login required decorator or to check the access token provided."""
         deserializer = URLSafeSerializer(self.secret_key)
 
         try:
