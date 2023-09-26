@@ -1,3 +1,0 @@
-# OSM Login Python
-
-test
