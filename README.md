@@ -4,6 +4,8 @@ Library to provide osm login oauth2.0 exchange to python projects
 
 Makes it very easier to implement osm authentication login to their project with oauth2.0
 
+🕮 [Documentation](https://hotosm.github.io/osm-login-python/)
+
 ## Install with [pip](https://pypi.org/project/osm-login-python/)
 
 ```
