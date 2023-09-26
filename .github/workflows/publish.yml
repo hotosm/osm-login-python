@@ -6,6 +6,6 @@ on:
 
 jobs:
   publish_to_pypi:
-    uses: hotosm/gh-workflows/.github/workflows/pypi_pdm_publish.yml@main
+    uses: hotosm/gh-workflows/.github/workflows/pypi_publish.yml@main
     with:
       pypi_token: ${{ secrets.PYPI_TOKEN }}
