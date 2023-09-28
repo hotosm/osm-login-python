@@ -51,11 +51,14 @@ pythonpath = "osm_login_python"
 
 [tool.commitizen]
 name = "cz_conventional_commits"
-version = "1.0.0"
 tag_format = "$version"
 version_scheme = "semver"
 version_provider = "pep621"
 update_changelog_on_bump = true
+version_files = [
+    "pyproject.toml:version",
+    "osm_login_python/__version__.py",
+]
 
 [tool.pdm]
 version = {from = "osm_login_python/__version__.py"}
