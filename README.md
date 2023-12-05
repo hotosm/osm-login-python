@@ -2,24 +2,32 @@
 
 Library to provide osm login oauth2.0 exchange to python projects
 
-Makes it very easier to implement osm authentication login to their project with oauth2.0
+Makes it very easier to implement osm authentication login to
+their project with oauth2.0
 
-🕮 [Documentation](https://hotosm.github.io/osm-login-python/)
+📖 [Documentation](https://hotosm.github.io/osm-login-python/)
 
 ## Install with [pip](https://pypi.org/project/osm-login-python/)
 
-```
+```bash
 pip install osm-login-python
 ```
 
 ## Import Auth and initialize class with your credentials
 
-```
+```python
 from osm_login_python.core import Auth
 ```
 
-```
-osm_auth=Auth(osm_url=YOUR_OSM_URL, client_id=YOUR_OSM_CLIENT_ID,client_secret=YOUR_OSM_CLIENT_SECRET, secret_key=YOUR_OSM_SECRET_KEY, login_redirect_uri=YOUR_OSM_LOGIN_REDIRECT_URI, scope=YOUR_OSM_SCOPE)
+```python
+osm_auth=Auth(
+    osm_url=YOUR_OSM_URL,
+    client_id=YOUR_OSM_CLIENT_ID,
+    client_secret=YOUR_OSM_CLIENT_SECRET,
+    secret_key=YOUR_OSM_SECRET_KEY,
+    login_redirect_uri=YOUR_OSM_LOGIN_REDIRECT_URI,
+    scope=YOUR_OSM_SCOPE,
+)
 ```
 
 ## Usage
@@ -34,14 +42,21 @@ Provides 3 Functions inside Auth class :
 
 On django :
 
-```
+```python
 from django.conf import settings
 from osm_login_python.core import Auth
 from django.http import JsonResponse
 import json
 
 # initialize osm_auth with our credentials
-osm_auth=Auth(osm_url=settings.OSM_URL, client_id=settings.OSM_CLIENT_ID,client_secret=settings.OSM_CLIENT_SECRET, secret_key=settings.OSM_SECRET_KEY, login_redirect_uri=settings.OSM_LOGIN_REDIRECT_URI, scope=settings.OSM_SCOPE)
+osm_auth=Auth(
+    osm_url=YOUR_OSM_URL,
+    client_id=YOUR_OSM_CLIENT_ID,
+    client_secret=YOUR_OSM_CLIENT_SECRET,
+    secret_key=YOUR_OSM_SECRET_KEY,
+    login_redirect_uri=YOUR_OSM_LOGIN_REDIRECT_URI,
+    scope=YOUR_OSM_SCOPE,
+)
 
 def login(request):
     login_url=osm_auth.login()
@@ -57,9 +72,11 @@ def get_my_data(request,access_token: str):
     return JsonResponse(user_data)
 ```
 
-- Check Django integration example here <https://github.com/hotosm/fAIr/tree/master/backend/login>
+- Check Django integration example here
+  <https://github.com/hotosm/fAIr/tree/master/backend/login>
 
-- Check FastAPI integration example here <https://github.com/hotosm/export-tool-api/tree/develop/API/auth>
+- Check FastAPI integration example here
+  <https://github.com/hotosm/export-tool-api/tree/develop/API/auth>
 
 ### Version Control
 
