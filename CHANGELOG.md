@@ -1,4 +1,8 @@
+# Changelog
+
 ## 1.0.2 (2023-12-05)
+
+- pin all dependencies >= over ~=
 
 ## 1.0.1 (2023-09-28)
 
