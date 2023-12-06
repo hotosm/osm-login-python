@@ -1,6 +1,6 @@
 [project]
 name = "osm-login-python"
-version = "1.0.1"
+version = "1.0.2"
 dynamic = ["version"]
 description = "Use OSM Token exchange with OAuth2.0 for python projects."
 readme = "README.md"
@@ -10,9 +10,9 @@ authors = [
 license = {text = "GPL-3.0-only"}
 requires-python = ">=3.9"
 dependencies = [
-    "itsdangerous~=2.1.2",
-    "pydantic>=2.0.1",
-    "requests-oauthlib~=1.3.1",
+    "itsdangerous>=2.0.0",
+    "pydantic>=2.0.0",
+    "requests-oauthlib>=1.3.0",
 ]
 keywords = ["osm", "openstreetmap", "oauth2", "login", "hot"]
 classifiers = [
