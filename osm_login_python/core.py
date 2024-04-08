@@ -6,7 +6,6 @@ import logging
 
 from itsdangerous import BadSignature, SignatureExpired
 from itsdangerous.url_safe import URLSafeSerializer
-from pydantic import ValidationError
 from requests_oauthlib import OAuth2Session
 
 from . import Login, Token
@@ -103,6 +102,6 @@ class Auth:
             user_data = deserializer.loads(decoded_token)
         except (SignatureExpired, BadSignature) as e:
             log.error(e)
-            raise ValidationError("Invalid token") from e
+            raise ValueError("Auth token is invalid or expired") from e
 
         return user_data
