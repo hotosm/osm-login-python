@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.3 (2024-04-10)
+
+### Fix
+
+- replace pydantic ValidationError with ValueError
+
 ## 1.0.2 (2023-12-05)
 
 - pin all dependencies >= over ~=
