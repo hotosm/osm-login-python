@@ -40,7 +40,7 @@ class Auth:
         """
         authorize_url = f"{self.osm_url}/oauth2/authorize/"
         login_url, _ = self.oauth.authorization_url(authorize_url)
-        return json.loads(Login(login_url=login_url).json())
+        return json.loads(Login(login_url=login_url).model_dump_json())
 
     def callback(self, callback_url: str) -> str:
         """Performs token exchange between OSM and the callback website.
@@ -75,7 +75,7 @@ class Auth:
         token = serializer.dumps(user_data)
         access_token = base64.b64encode(bytes(token, "utf-8")).decode("utf-8")
         token = Token(access_token=access_token)
-        return json.loads(token.json())
+        return json.loads(token.model_dump_json())
 
     def deserialize_access_token(self, access_token: str) -> dict:
         """Returns the userdata as JSON from access token.
