@@ -42,30 +42,47 @@ class Auth:
         login_url, _ = self.oauth.authorization_url(authorize_url)
         return json.loads(Login(login_url=login_url).model_dump_json())
 
-    def callback(self, callback_url: str) -> str:
+    def callback(self, callback_url: str) -> dict:
         """Performs token exchange between OSM and the callback website.
 
         Core will use Oauth secret key from configuration while deserializing token,
         provides access token that can be used for authorized endpoints.
+
+        NOTE to keep backward compatibility, we have 'access_token' in the returned
+        dictionary. However, this would better be described as encoded_user_data.
+        The 'access_token' (encoded user data) can only be deserialised via the
+        'deserialize_access_token' method in this module.
+
+        NOTE 'raw_token' is the second item in the returned dictionary, which is
+        the actual OSM token for the API. This should not be stored in a frontend
+        and can be discarded if not required. It could, however, be stored in a
+        secure httpOnly cookie in the frontend if required, for subsequent calls.
 
         Args:
             callback_url(str): Absolute URL should be passed which
                 is catched from login_redirect_uri.
 
         Returns:
-            access_token(str): The decoded access token.
+            dict: The encoded user details and raw access token.
         """
         token_url = f"{self.osm_url}/oauth2/token"
-        self.oauth.fetch_token(
+        token = self.oauth.fetch_token(
             token_url,
             authorization_response=callback_url,
             client_secret=self.client_secret,
         )
+        # NOTE this is the actual token for the OSM API
+        raw_osm_access_token = token.get("access_token")
+
         user_api_url = f"{self.osm_url}/api/0.6/user/details.json"
+        # NOTE the osm token is included automatically in requests from self.oauth
         resp = self.oauth.get(user_api_url)
         if resp.status_code != 200:
             raise ValueError("Invalid response from OSM")
         data = resp.json().get("user")
+
+        # NOTE this encodes the data in a URL safe format using a secret key
+        # FIXME is this step actually required?
         serializer = URLSafeSerializer(self.secret_key)
         user_data = {
             "id": data.get("id"),
@@ -73,9 +90,13 @@ class Auth:
             "img_url": data.get("img").get("href") if data.get("img") else None,
         }
         token = serializer.dumps(user_data)
+
+        # NOTE here the encoded user data is (further) base64 encoded
         access_token = base64.b64encode(bytes(token, "utf-8")).decode("utf-8")
-        token = Token(access_token=access_token)
-        return json.loads(token.model_dump_json())
+
+        # The actual response from this endpoint {"access_token": xxx, "raw_token": xxx}
+        token = Token(access_token=access_token, raw_token=raw_osm_access_token)
+        return token.model_dump()
 
     def deserialize_access_token(self, access_token: str) -> dict:
         """Returns the userdata as JSON from access token.

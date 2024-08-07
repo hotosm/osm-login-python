@@ -13,3 +13,4 @@ class Token(BaseModel):
     """Model to return the access token."""
 
     access_token: str
+    raw_token: str
