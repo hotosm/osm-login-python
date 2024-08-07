@@ -74,9 +74,7 @@ target-versions = ["py39", "py310", "py311"]
 [tool.ruff]
 fix = true
 line-length = 132
-target-version = "py310"
-select = ["I", "E", "W", "D", "B", "F", "N", "Q"]
-ignore = ["N805", "B008"]
+target-version = "py39"
 exclude = [
     ".git",
     ".ruff_cache",
@@ -86,5 +84,7 @@ exclude = [
     "dist",
     "osm_login_python/__version__.py",
 ]
-[tool.ruff.pydocstyle]
+[tool.ruff.lint]
+select = ["I", "E", "W", "D", "B", "F", "N", "Q"]
+[tool.ruff.lint.pydocstyle]
 convention = "google"
