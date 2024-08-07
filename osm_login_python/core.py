@@ -63,7 +63,7 @@ class Auth:
                 is catched from login_redirect_uri.
 
         Returns:
-            dict: The encoded user details and raw access token.
+            dict: The encoded user details and encoded raw access token.
         """
         token_url = f"{self.osm_url}/oauth2/token"
         token = self.oauth.fetch_token(
@@ -80,22 +80,22 @@ class Auth:
         if resp.status_code != 200:
             raise ValueError("Invalid response from OSM")
         data = resp.json().get("user")
-
-        # NOTE this encodes the data in a URL safe format using a secret key
-        # FIXME is this step actually required?
-        serializer = URLSafeSerializer(self.secret_key)
         user_data = {
             "id": data.get("id"),
             "username": data.get("display_name"),
             "img_url": data.get("img").get("href") if data.get("img") else None,
         }
-        token = serializer.dumps(user_data)
 
-        # NOTE here the encoded user data is (further) base64 encoded
-        access_token = base64.b64encode(bytes(token, "utf-8")).decode("utf-8")
+        # NOTE this encodes the data in a URL safe format using a secret key
+        serializer = URLSafeSerializer(self.secret_key)
+        serialized_user_data = serializer.dumps(user_data)
+        serialized_raw_token = serializer.dumps(raw_osm_access_token)
+        # NOTE here the encoded data is (further) base64 encoded
+        encoded_user_data = base64.b64encode(bytes(serialized_user_data, "utf-8")).decode("utf-8")
+        encoded_raw_token = base64.b64encode(bytes(serialized_raw_token, "utf-8")).decode("utf-8")
 
         # The actual response from this endpoint {"access_token": xxx, "raw_token": xxx}
-        token = Token(access_token=access_token, raw_token=raw_osm_access_token)
+        token = Token(access_token=encoded_user_data, raw_token=encoded_raw_token)
         return token.model_dump()
 
     def deserialize_access_token(self, access_token: str) -> dict:
@@ -108,7 +108,7 @@ class Auth:
             access_token(str): The access token from Auth.callback()
 
         Returns:
-            user_data(dict): A JSON of user data from OSM.
+            deserialized_data(dict): A deserialized JSON data.
         """
         deserializer = URLSafeSerializer(self.secret_key)
 
@@ -120,9 +120,9 @@ class Auth:
             raise ValueError("Could not decode token") from e
 
         try:
-            user_data = deserializer.loads(decoded_token)
+            deserialized_data = deserializer.loads(decoded_token)
         except (SignatureExpired, BadSignature) as e:
             log.error(e)
             raise ValueError("Auth token is invalid or expired") from e
 
-        return user_data
+        return deserialized_data
