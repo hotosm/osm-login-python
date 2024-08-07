@@ -7,6 +7,8 @@ their project with oauth2.0
 
 📖 [Documentation](https://hotosm.github.io/osm-login-python/)
 
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/hotosm/osm-login-python/main.svg)](https://results.pre-commit.ci/latest/github/hotosm/osm-login-python/main)
+
 ## Install with [pip](https://pypi.org/project/osm-login-python/)
 
 ```bash
