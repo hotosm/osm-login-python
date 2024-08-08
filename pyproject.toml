@@ -6,6 +6,7 @@ description = "Package to manage OAuth 2.0 login for OSM in Python."
 readme = "README.md"
 authors = [
     {name = "Kshitij Raj Sharma", email = "skshitizraj@gmail.com"},
+    {name = "Sam Woodcock", email = "sam.woodcock@protonmail.com"},
 ]
 license = {text = "GPL-3.0-only"}
 requires-python = ">=3.9"
