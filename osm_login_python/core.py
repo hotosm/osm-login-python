@@ -3,6 +3,7 @@
 import base64
 import json
 import logging
+from typing import Any
 
 from itsdangerous import BadSignature, SignatureExpired
 from itsdangerous.url_safe import URLSafeSerializer
@@ -46,6 +47,24 @@ class Auth:
         login_url, _ = self.oauth.authorization_url(authorize_url)
         return json.loads(Login(login_url=login_url).model_dump_json())
 
+    def _serialize_encode_data(self, data: Any) -> str:
+        """Convert data to a serialized base64 encoded string.
+
+        This encodes the data in a URL safe format using a secret key.
+        The data can only be decoded using the secret key.
+
+        Args:
+            data(Any): String or JSON data to be serialized.
+
+        Returns:
+            encoded_data(str): The serialized and base64 encoded data.
+        """
+        serializer = URLSafeSerializer(self.secret_key)
+        serialized_data = serializer.dumps(data)
+        # NOTE here the serialized data is (further) base64 encoded
+        encoded_data = base64.b64encode(bytes(serialized_data, "utf-8")).decode("utf-8")
+        return encoded_data
+
     def callback(self, callback_url: str) -> dict:
         """Performs token exchange between OSM and the callback website.
 
@@ -78,7 +97,7 @@ class Auth:
             client_secret=self.client_secret,
         )
         # NOTE this is the actual token for the OSM API
-        raw_osm_access_token = token.get("access_token")
+        osm_access_token = token.get("access_token")
 
         user_api_url = f"{self.osm_url}/api/0.6/user/details.json"
         # NOTE the osm token is included automatically in requests from self.oauth
@@ -92,16 +111,11 @@ class Auth:
             "img_url": data.get("img").get("href") if data.get("img") else None,
         }
 
-        # NOTE this encodes the data in a URL safe format using a secret key
-        serializer = URLSafeSerializer(self.secret_key)
-        serialized_user_data = serializer.dumps(user_data)
-        serialized_raw_token = serializer.dumps(raw_osm_access_token)
-        # NOTE here the encoded data is (further) base64 encoded
-        encoded_user_data = base64.b64encode(bytes(serialized_user_data, "utf-8")).decode("utf-8")
-        encoded_raw_token = base64.b64encode(bytes(serialized_raw_token, "utf-8")).decode("utf-8")
+        encoded_user_data = self._serialize_encode_data(user_data)
+        encoded_osm_token = self._serialize_encode_data(osm_access_token)
 
         # The actual response from this endpoint {"user_data": xxx, "oauth_token": xxx}
-        token = Token(user_data=encoded_user_data, oauth_token=encoded_raw_token)
+        token = Token(user_data=encoded_user_data, oauth_token=encoded_osm_token)
         return token.model_dump()
 
     def deserialize_data(self, data: str) -> dict:
