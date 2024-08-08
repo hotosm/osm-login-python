@@ -18,6 +18,10 @@ class Auth:
 
     def __init__(self, osm_url, client_id, client_secret, secret_key, login_redirect_uri, scope):
         """Set object params and get OAuth2 session."""
+        # Strip trailing slash so our URL forming works
+        if osm_url.endswith("/"):
+            osm_url = osm_url.rstrip("/")
+
         self.osm_url = osm_url
         self.client_secret = client_secret
         self.secret_key = secret_key
