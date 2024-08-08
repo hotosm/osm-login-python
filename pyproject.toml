@@ -33,6 +33,7 @@ repository = "https://github.com/hotosm/osm-login-python"
 [project.optional-dependencies]
 test = [
     "pytest>=7.4.2",
+    "pytest-mock>=3.14.0",
 ]
 docs = [
     "mkdocs>=1.5.3",
