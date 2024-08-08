@@ -45,25 +45,27 @@ class Auth:
     def callback(self, callback_url: str) -> dict:
         """Performs token exchange between OSM and the callback website.
 
-        Core will use Oauth secret key from configuration while deserializing token,
-        provides access token that can be used for authorized endpoints.
+        The returned data will be individually serialized and encoded, so it can
+        only be used from within the same module.
 
-        NOTE to keep backward compatibility, we have 'access_token' in the returned
-        dictionary. However, this would better be described as encoded_user_data.
-        The 'access_token' (encoded user data) can only be deserialised via the
-        'deserialize_access_token' method in this module.
+        The returned dictionary / JSON will contain:
+        - `user_data`, containing OSM user details.
+        - `oauth_token`, containing the OSM OAuth token for API calls.
 
-        NOTE 'raw_token' is the second item in the returned dictionary, which is
-        the actual OSM token for the API. This should not be stored in a frontend
-        and can be discarded if not required. It could, however, be stored in a
-        secure httpOnly cookie in the frontend if required, for subsequent calls.
+        To use these values, we must run them through the `deserialize_data`
+        function to deserialize and decode the data using the `secret_key`
+        variable set.
+
+        NOTE 'oauth_token' should not be stored in a frontend and can be discarded
+        if not required. It could, however, be stored in a secure httpOnly cookie
+        in the frontend if required, for subsequent API calls.
 
         Args:
             callback_url(str): Absolute URL should be passed which
-                is catched from login_redirect_uri.
+                is returned from login_redirect_uri.
 
         Returns:
-            dict: The encoded user details and encoded raw access token.
+            dict: The encoded user details and encoded OSM access token.
         """
         token_url = f"{self.osm_url}/oauth2/token"
         token = self.oauth.fetch_token(
@@ -94,18 +96,18 @@ class Auth:
         encoded_user_data = base64.b64encode(bytes(serialized_user_data, "utf-8")).decode("utf-8")
         encoded_raw_token = base64.b64encode(bytes(serialized_raw_token, "utf-8")).decode("utf-8")
 
-        # The actual response from this endpoint {"access_token": xxx, "raw_token": xxx}
-        token = Token(access_token=encoded_user_data, raw_token=encoded_raw_token)
+        # The actual response from this endpoint {"user_data": xxx, "oauth_token": xxx}
+        token = Token(user_data=encoded_user_data, oauth_token=encoded_raw_token)
         return token.model_dump()
 
-    def deserialize_access_token(self, access_token: str) -> dict:
+    def deserialize_data(self, data: str) -> dict:
         """Returns the userdata as JSON from access token.
 
         Can be used for login required decorator or to check
         the access token provided.
 
         Args:
-            access_token(str): The access token from Auth.callback()
+            data(str): The user_data or oauth_token from Auth.callback()
 
         Returns:
             deserialized_data(dict): A deserialized JSON data.
@@ -113,14 +115,14 @@ class Auth:
         deserializer = URLSafeSerializer(self.secret_key)
 
         try:
-            decoded_token = base64.b64decode(access_token)
+            decoded_data = base64.b64decode(data)
         except Exception as e:
             log.error(e)
-            log.error(f"Could not decode token: {access_token}")
+            log.error(f"Could not decode token: {data}")
             raise ValueError("Could not decode token") from e
 
         try:
-            deserialized_data = deserializer.loads(decoded_token)
+            deserialized_data = deserializer.loads(decoded_data)
         except (SignatureExpired, BadSignature) as e:
             log.error(e)
             raise ValueError("Auth token is invalid or expired") from e
