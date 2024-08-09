@@ -34,6 +34,8 @@ repository = "https://github.com/hotosm/osm-login-python"
 test = [
     "pytest>=7.4.2",
     "pytest-mock>=3.14.0",
+    "coverage>=7.6.1",
+    "coverage-badge>=1.1.2",
 ]
 docs = [
     "mkdocs>=1.5.3",
@@ -90,3 +92,9 @@ exclude = [
 select = ["I", "E", "W", "D", "B", "F", "N", "Q"]
 [tool.ruff.lint.pydocstyle]
 convention = "google"
+
+[tool.coverage.run]
+source = ["osm_login_python"]
+
+[tool.coverage.report]
+show_missing = true
