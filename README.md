@@ -6,6 +6,8 @@ Package to manage OAuth 2.0 login for OSM in Python.
 
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/hotosm/osm-login-python/main.svg)](https://results.pre-commit.ci/latest/github/hotosm/osm-login-python/main)
 
+![coverage badge](./docs/coverage.svg)
+
 ## Install with [pip](https://pypi.org/project/osm-login-python/)
 
 ```bash
@@ -105,6 +107,17 @@ def get_my_data(request, serialized_user_data: str):
 ### Version Control
 
 Use [commitizen](https://pypi.org/project/commitizen/) for version control.
+
+### Test Coverage
+
+Generate a coverage badge:
+
+```bash
+pdm install
+pdm run coverage run -m pytest
+# pdm run coverage report
+pdm run coverage coverage-badge -o docs/coverage.svg
+```
 
 ### Contribute
 
