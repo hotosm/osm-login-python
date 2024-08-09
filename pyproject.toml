@@ -1,6 +1,6 @@
 [project]
 name = "osm-login-python"
-version = "1.0.3"
+version = "2.0.0"
 dynamic = ["version"]
 description = "Package to manage OAuth 2.0 login for OSM in Python."
 readme = "README.md"

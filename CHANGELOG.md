@@ -1,5 +1,22 @@
 # Changelog
 
+## 2.0.0 (2024-08-09)
+
+### Feat
+
+- return the raw OSM OAuth2 token in addition (to use or discard as required)
+
+### Fix
+
+- strip trailing slash if included in osm_url
+- update pydantic deprecated use of .json() --> .model_dump_json()
+
+### Refactor
+
+- move serialization logic into a reusable private method
+- tweak API to return `user_data` and `oauth_token` params
+- also serialise the raw_token in response
+
 ## 1.0.3 (2024-04-10)
 
 ### Fix
