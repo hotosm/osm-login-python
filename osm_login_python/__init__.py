@@ -10,6 +10,7 @@ class Login(BaseModel):
 
 
 class Token(BaseModel):
-    """Model to return the access token."""
+    """Model to return the user data and OSM OAuth token."""
 
-    access_token: str
+    user_data: str
+    oauth_token: str
