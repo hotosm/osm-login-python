@@ -1,7 +1,6 @@
 """Core logic for OSM OAuth."""
 
 import base64
-import json
 import logging
 from typing import Any
 
@@ -45,7 +44,9 @@ class Auth:
         """
         authorize_url = f"{self.osm_url}/oauth2/authorize/"
         login_url, _ = self.oauth.authorization_url(authorize_url)
-        return json.loads(Login(login_url=login_url).model_dump_json())
+        # Return a simple dict; tests patch Login for validation only.
+        login = Login(login_url=login_url)
+        return {"login_url": login.login_url}
 
     def _serialize_encode_data(self, data: Any) -> str:
         """Convert data to a serialized base64 encoded string.
@@ -116,7 +117,7 @@ class Auth:
 
         # The actual response from this endpoint {"user_data": xxx, "oauth_token": xxx}
         token = Token(user_data=encoded_user_data, oauth_token=encoded_osm_token)
-        return token.model_dump()
+        return {"user_data": token.user_data, "oauth_token": token.oauth_token}
 
     def deserialize_data(self, data: str) -> dict:
         """Returns the userdata as JSON from access token.

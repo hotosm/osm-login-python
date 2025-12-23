@@ -12,11 +12,8 @@ def test_serialize_deserialize(auth):
 
 def test_login(auth, mocker):
     """Test the login() method returns a URL."""
-    # Mock the return value for the Login model
+    # Mock the authorization_url returned by the OAuth session
     mocker.patch.object(auth.oauth, "authorization_url", return_value=("https://openstreetmap.org/oauth2/authorize", "state"))
-    mock_login_instance = mocker.Mock()
-    mock_login_instance.model_dump_json.return_value = '{"login_url": "https://openstreetmap.org/oauth2/authorize"}'
-    mocker.patch("osm_login_python.core.Login", return_value=mock_login_instance)
 
     # Test the login method using mock data
     result = auth.login()
