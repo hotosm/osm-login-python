@@ -12,6 +12,4 @@ on:
 
 jobs:
   publish_docs:
-    uses: hotosm/gh-workflows/.github/workflows/mkdocs_build.yml@1.4.0
-    # with:
-    #   doxygen: true
+    uses: hotosm/gh-workflows/.github/workflows/mkdocs_build.yml@3.4.1
