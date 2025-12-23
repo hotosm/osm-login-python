@@ -3,6 +3,7 @@
 ## [Unreleased] - 2025-12-23
 
 ### Refactor
+
 - Replaced Pydantic models in `__init__.py` with Python standard library dataclasses.
 - Added basic type validation in `__post_init__` for Login and Token models.
 
