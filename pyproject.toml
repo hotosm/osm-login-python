@@ -1,6 +1,6 @@
 [project]
 name = "osm-login-python"
-version = "2.0.0"
+version = "2.1.0"
 description = "Package to manage OAuth 2.0 login for OSM in Python."
 readme = "README.md"
 authors = [
@@ -52,7 +52,7 @@ packages = ["osm_login_python"]
 
 [tool.commitizen]
 name = "cz_conventional_commits"
-version = "2.0.0"
+version = "2.1.0"
 version_provider = "uv"
 version_files = [
     "pyproject.toml:version",
