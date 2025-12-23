@@ -111,10 +111,10 @@ Use [commitizen](https://pypi.org/project/commitizen/) for version control.
 Generate a coverage badge:
 
 ```bash
-pdm install
-pdm run coverage run -m pytest
-# pdm run coverage report
-pdm run coverage coverage-badge -o docs/coverage.svg
+uv sync --extra test
+uv run coverage run -m pytest
+# uv run coverage report
+uv run coverage-badge -o docs/coverage.svg
 ```
 
 ### Contribute

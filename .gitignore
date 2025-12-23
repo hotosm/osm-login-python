@@ -18,6 +18,7 @@ wheels/
 .installed.cfg
 *.egg
 venv/
+.venv
 __pycache__
 
 # IDE
