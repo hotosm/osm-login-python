@@ -36,7 +36,6 @@ osm_auth=Auth(
 Three functions are provided:
 
 1. login() -- Returns the login url for OSM.
-
    - The user must then access this URL and authorize the OAuth application
      to login.
    - The user will be redirected to the configured `login_redirect_uri` after
@@ -45,7 +44,6 @@ Three functions are provided:
      current URL to the function (which includes the OAuth authorization code).
 
 2. callback() -- Returns the encoded and serialized data:
-
    - `user_data` a JSON of OSM user data.
    - `oauth_token` a string OSM OAuth token.
    - Both are encoded and serialized as an additional safety measure when used
