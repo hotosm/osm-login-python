@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.1.3 (2026-03-16)
+
+### Fix
+
+- **cz**: adds cz group on deps
+
 ## 2.1.2 (2026-03-16)
 
 ### Fix
