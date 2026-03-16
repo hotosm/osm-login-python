@@ -100,7 +100,7 @@ def get_my_data(request, serialized_user_data: str):
   <https://github.com/hotosm/fAIr/tree/master/backend/login>
 
 - FastAPI integration example here
-  <https://github.com/hotosm/export-tool-api/tree/develop/API/auth>
+  <https://github.com/hotosm/raw-data-api/tree/develop/API/auth>
 
 ### Version Control
 
