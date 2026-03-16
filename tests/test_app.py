@@ -22,8 +22,11 @@ def test_login(auth, mocker):
 
 def test_callback(auth, mocker):
     """Test the callback() method returns serialized data."""
-    # Patch the requests_oauthlib fetch_token method with a mock access_token
-    mocker.patch.object(auth.oauth, "fetch_token", return_value={"access_token": "fswfhewuihfewuhew"})
+    # Patch the httpx token exchange call with a mock access_token
+    mock_token_response = mocker.Mock()
+    mock_token_response.status_code = 200
+    mock_token_response.json.return_value = {"access_token": "fswfhewuihfewuhew"}
+    mocker.patch("osm_login_python.core.httpx.post", return_value=mock_token_response)
 
     # Mock OSM user data and patch GET request
     mock_response = mocker.Mock()
@@ -34,7 +37,7 @@ def test_callback(auth, mocker):
     mocker.patch.object(auth.oauth, "get", return_value=mock_response)
 
     # Compare expected responses with actual responses from callback()
-    api_result = auth.callback("https://example.com/callback")
+    api_result = auth.callback("https://example.com/callback?code=test-code")
 
     expected_user_data = auth._serialize_encode_data(
         {"id": 12345, "username": "testuser", "img_url": "https://example.com/image.jpg"}
