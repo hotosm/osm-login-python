@@ -3,7 +3,9 @@
 import base64
 import logging
 from typing import Any
+from urllib.parse import parse_qs, urlparse
 
+import httpx
 from itsdangerous import BadSignature, SignatureExpired
 from itsdangerous.url_safe import URLSafeSerializer
 from requests_oauthlib import OAuth2Session
@@ -23,8 +25,10 @@ class Auth:
             osm_url = osm_url.rstrip("/")
 
         self.osm_url = osm_url
+        self.client_id = client_id
         self.client_secret = client_secret
         self.secret_key = secret_key
+        self.login_redirect_uri = login_redirect_uri
         self.oauth = OAuth2Session(
             client_id,
             redirect_uri=login_redirect_uri,
@@ -92,17 +96,33 @@ class Auth:
             dict: The encoded user details and encoded OSM access token.
         """
         token_url = f"{self.osm_url}/oauth2/token"
-        token = self.oauth.fetch_token(
+
+        code = parse_qs(urlparse(callback_url).query).get("code", [None])[0]
+        if not code:
+            raise ValueError("Authorization callback missing code")
+
+        token_resp = httpx.post(
             token_url,
-            authorization_response=callback_url,
-            client_secret=self.client_secret,
-            include_client_id=True,  # hotfix: osm now requires credentials passed strictly in the POST body
+            data={
+                "grant_type": "authorization_code",
+                "client_id": self.client_id,
+                "client_secret": self.client_secret,
+                "code": code,
+                "redirect_uri": self.login_redirect_uri,
+            },
+            headers={"Accept": "application/json"},
+            timeout=20.0,
         )
+        if token_resp.status_code != 200:
+            raise ValueError(f"Token exchange failed: {token_resp.status_code}")
+        token = token_resp.json()
+
         # NOTE this is the actual token for the OSM API
         osm_access_token = token.get("access_token")
 
         user_api_url = f"{self.osm_url}/api/0.6/user/details.json"
         # NOTE the osm token is included automatically in requests from self.oauth
+        self.oauth.token = token
         resp = self.oauth.get(user_api_url)
         if resp.status_code != 200:
             raise ValueError("Invalid response from OSM")
