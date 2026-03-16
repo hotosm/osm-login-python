@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.1.2 (2026-03-16)
+
+### Fix
+
+- **accesstoken**: fixes bug on the oauth token exchange temp
+
 ## 2.1.1 (2026-03-16)
 
 ### Fix
