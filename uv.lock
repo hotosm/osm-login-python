@@ -987,7 +987,7 @@ wheels = [
 
 [[package]]
 name = "osm-login-python"
-version = "2.1.3"
+version = "2.1.4"
 source = { editable = "." }
 dependencies = [
     { name = "httpx" },

@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.1.4 (2026-03-16)
+
+### Fix
+
+- **tests**: mock the httpx call
+
 ## 2.1.3 (2026-03-16)
 
 ### Fix
