@@ -96,6 +96,7 @@ class Auth:
             token_url,
             authorization_response=callback_url,
             client_secret=self.client_secret,
+            include_client_id=True,  # hotfix: osm now requires credentials passed strictly in the POST body
         )
         # NOTE this is the actual token for the OSM API
         osm_access_token = token.get("access_token")
