@@ -990,8 +990,6 @@ name = "osm-login-python"
 version = "2.1.2"
 source = { editable = "." }
 dependencies = [
-    { name = "commitizen", version = "4.10.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
-    { name = "commitizen", version = "4.13.9", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
     { name = "httpx" },
     { name = "itsdangerous" },
     { name = "requests-oauthlib" },
@@ -1014,9 +1012,14 @@ test = [
     { name = "pytest-mock" },
 ]
 
+[package.dev-dependencies]
+dev = [
+    { name = "commitizen", version = "4.10.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
+    { name = "commitizen", version = "4.13.9", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
+]
+
 [package.metadata]
 requires-dist = [
-    { name = "commitizen", specifier = ">=4.10.1" },
     { name = "coverage", marker = "extra == 'test'", specifier = ">=7.6.1" },
     { name = "coverage-badge", marker = "extra == 'test'", specifier = ">=1.1.2" },
     { name = "httpx", specifier = ">=0.28.1" },
@@ -1030,6 +1033,9 @@ requires-dist = [
     { name = "requests-oauthlib", specifier = ">=1.3.0" },
 ]
 provides-extras = ["test", "docs"]
+
+[package.metadata.requires-dev]
+dev = [{ name = "commitizen", specifier = ">=4.10.1" }]
 
 [[package]]
 name = "packaging"
