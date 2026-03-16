@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.1.1 (2026-03-16)
+
+### Fix
+
+- **docs**: fixes doc link for example and hotfix of post body
+
 ## 2.1.0 (2025-12-23)
 
 ### Fix
