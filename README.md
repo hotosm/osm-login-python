@@ -21,7 +21,7 @@ from osm_login_python.core import Auth
 ```
 
 ```python
-osm_auth=Auth(
+osm_auth = Auth(
     osm_url=YOUR_OSM_URL,
     client_id=YOUR_OSM_CLIENT_ID,
     client_secret=YOUR_OSM_CLIENT_SECRET,
@@ -82,14 +82,17 @@ osm_auth = Auth(
     scope=YOUR_OSM_SCOPE,
 )
 
+
 def login(request):
     login_url = osm_auth.login()
     return JsonResponse(login_url)
+
 
 def callback(request):
     # Generating token through osm_auth library method
     token = osm_auth.callback(request.build_absolute_uri())
     return JsonResponse(token)
+
 
 def get_my_data(request, serialized_user_data: str):
     user_data = osm_auth.deserialize_data(serialized_user_data)
